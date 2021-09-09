@@ -1,0 +1,9 @@
+version: "3"
+services: 
+  go_prog: # サービス名
+    image: go_prog
+    build: ./go_prog
+    volumes:
+      - ./go_prog:/go/app # マウントディレクトリ
+    ports: 
+      - 50500:8080

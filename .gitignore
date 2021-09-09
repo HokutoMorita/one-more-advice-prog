@@ -1,0 +1,11 @@
+# python
+/**/__pycache__/
+/**/.python-version/
+/**/.DS_Store/
+
+# osx
+*DS_Store
+
+.vscode
+/**/.ipynb_checkpoints
+01_データ収集基盤_Qiita/data/**/.*csv
