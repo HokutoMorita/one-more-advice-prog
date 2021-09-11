@@ -1,0 +1,16 @@
+# goバージョン
+FROM golang:1.16.3-alpine AS builder
+
+# ホストのファイルをコンテナの作業ディレクトリに移行
+COPY ./src /go/app
+
+# ワーキングディレクトリの設定
+WORKDIR /go/app/first_webapp
+
+RUN go build -o first_webapp_morita main.go
+
+FROM alpine:latest
+
+COPY --from=builder /go/app/first_webapp/first_webapp_morita /
+
+ENTRYPOINT /first_webapp_morita

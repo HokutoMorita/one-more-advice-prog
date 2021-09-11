@@ -1,9 +1,19 @@
 version: "3"
 services: 
-  go_prog: # サービス名
-    image: go_prog
-    build: ./go_prog
+  go_prog: # go言語の学習用
+    build:
+      context: ./go_prog
+      dockerfile: Dockerfile_goProg
+    ports:
+      - 50500:8080
+    volumes:
+      - ./go_prog:/go_prog # マウントディレクトリ
+  first_webapp: # webアプリ
+    build: 
+      context: ./go_prog
+      dockerfile: Dockerfile_firstWebapp
+    ports: 
+      - 50501:8080
     volumes:
       - ./go_prog:/go/app # マウントディレクトリ
-    ports: 
-      - 50500:8080
+    
