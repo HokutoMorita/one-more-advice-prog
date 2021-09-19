@@ -90,16 +90,19 @@ func generateHTML(writer http.ResponseWriter, data interface{}, filenames ...str
 
 // ログ情報
 func info(args ...interface{}) {
+    logger.SetOutput(os.Stdout)
     logger.SetPrefix("INFO ")
     logger.Println(args...)
 }
 
 func danger(args ...interface{}) {
+    logger.SetOutput(os.Stdout)
     logger.SetPrefix("ERROR ")
     logger.Println(args...)
 }
 
 func warning(args ...interface{}) {
+    logger.SetOutput(os.Stdout)
     logger.SetPrefix("WARNING ")
     logger.Println(args...)
 }

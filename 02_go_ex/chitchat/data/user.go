@@ -2,6 +2,7 @@ package data
 
 import (
     "time"
+    // "fmt"
 )
 
 type User struct {
@@ -23,14 +24,20 @@ type Session struct {
 
 // Create a new session for an existing user
 func (user *User) CreateSession() (session Session, err error) {
-    statement := "insert into sessions (uuid, email, user_id, created_at) values ($1, $2, $3, $4) returning id, uuid, email, user_id, created_at"
+    // statement := "insert into sessions (uuid, email, user_id, created_at) values ($1, $2, $3, $4) returning id, uuid, email, user_id, created_at"
+    statement := "insert into sessions (uuid, email, user_id, created_at) values (?, ?, ?, ?)"
     stmt, err := Db.Prepare(statement)
     if err != nil {
         return
     }
     defer stmt.Close()
     // use QueryRow to return a row and scan the returned id into the Session struct
-    err = stmt.QueryRow(createUUID(), user.Email, user.Id, time.Now()).Scan(&session.Id, &session.Uuid, &session.Email, &session.UserId, &session.CreatedAt)
+    // err = stmt.QueryRow(createUUID(), user.Email, user.Id, time.Now()).Scan(&session.Id, &session.Uuid, &session.Email, &session.UserId, &session.CreatedAt)
+    _, err = stmt.Exec(createUUID(), user.Email, user.Id, time.Now())
+
+    session = Session{}
+    err = Db.QueryRow("SELECT id, uuid, email, user_id, created_at FROM sessions WHERE user_id = ?", user.Id).
+        Scan(&session.Id, &session.Uuid, &session.Email, &session.UserId, &session.CreatedAt)
     return
 }
 
@@ -44,10 +51,13 @@ func (user *User) Session() (session Session, err error) {
 
 // Check if session is valid in the database
 func (session *Session) Check() (valid bool, err error) {
-    err = Db.QueryRow("SELECT id, uuid, email, user_id, created_at FROM sessions WHERE uuid = $1", session.Uuid).
+    // err = Db.QueryRow("SELECT id, uuid, email, user_id, created_at FROM sessions WHERE uuid = $1", session.Uuid).
+    //     Scan(&session.Id, &session.Uuid, &session.Email, &session.UserId, &session.CreatedAt)
+    err = Db.QueryRow("SELECT id, uuid, email, user_id, created_at FROM sessions WHERE uuid = ?", session.Uuid).
         Scan(&session.Id, &session.Uuid, &session.Email, &session.UserId, &session.CreatedAt)
     if err != nil {
         valid = false
+        // fmt.Println("SELECT文に失敗してそう", err)
         return
     }
     if session.Id != 0 {
@@ -58,7 +68,7 @@ func (session *Session) Check() (valid bool, err error) {
 
 // Delete session from database
 func (session *Session) DeleteByUUID() (err error) {
-    statement := "delete from sessions where uuid = $1"
+    statement := "delete from sessions where uuid = ?"
     stmt, err := Db.Prepare(statement)
     if err != nil {
         return
@@ -72,7 +82,7 @@ func (session *Session) DeleteByUUID() (err error) {
 // Get the user from the session
 func (session *Session) User() (user User, err error) {
     user = User{}
-    err = Db.QueryRow("SELECT id, uuid, name, email, created_at FROM users WHERE id = $1", session.UserId).
+    err = Db.QueryRow("SELECT id, uuid, name, email, created_at FROM users WHERE id = ?", session.UserId).
         Scan(&user.Id, &user.Uuid, &user.Name, &user.Email, &user.CreatedAt)
     return
 }
@@ -89,7 +99,8 @@ func (user *User) Create() (err error) {
     // Postgres does not automatically return the last insert id, because it would be wrong to assume
     // you're always using a sequence.You need to use the RETURNING keyword in your insert to get this
     // information from postgres.
-    statement := "insert into users (uuid, name, email, password, created_at) values ($1, $2, $3, $4, $5) returning id, uuid, created_at"
+    // statement := "insert into users (uuid, name, email, password, created_at) values ($1, $2, $3, $4, $5) returning id, uuid, created_at"
+    statement := "insert into users (uuid, name, email, password, created_at) values (?, ?, ?, ?, ?)"
     stmt, err := Db.Prepare(statement)
     if err != nil {
         return
@@ -97,7 +108,8 @@ func (user *User) Create() (err error) {
     defer stmt.Close()
 
     // use QueryRow to return a row and scan the returned id into the User struct
-    err = stmt.QueryRow(createUUID(), user.Name, user.Email, Encrypt(user.Password), time.Now()).Scan(&user.Id, &user.Uuid, &user.CreatedAt)
+    // err = stmt.QueryRow(createUUID(), user.Name, user.Email, Encrypt(user.Password), time.Now()).Scan(&user.Id, &user.Uuid, &user.CreatedAt)
+    _, err = stmt.Exec(createUUID(), user.Name, user.Email, Encrypt(user.Password), time.Now())
     return
 }
 
@@ -154,7 +166,9 @@ func Users() (users []User, err error) {
 // Get a single user given the email
 func UserByEmail(email string) (user User, err error) {
     user = User{}
-    err = Db.QueryRow("SELECT id, uuid, name, email, password, created_at FROM users WHERE email = $1", email).
+    // err = Db.QueryRow("SELECT id, uuid, name, email, password, created_at FROM users WHERE email = $1", email).
+    //     Scan(&user.Id, &user.Uuid, &user.Name, &user.Email, &user.Password, &user.CreatedAt)
+    err = Db.QueryRow("SELECT id, uuid, name, email, password, created_at FROM users WHERE email = ?", email).
         Scan(&user.Id, &user.Uuid, &user.Name, &user.Email, &user.Password, &user.CreatedAt)
     return
 }

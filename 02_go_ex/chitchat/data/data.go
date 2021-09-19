@@ -14,7 +14,7 @@ var Db *sql.DB
 
 func init() {
     var err error
-    Db, err = sql.Open("mysql", "root:one_more_advice_prog@tcp(127.0.0.1:4307)/one_more_advice_prog?collation=utf8mb4_unicode_ci")
+    Db, err = sql.Open("mysql", "root:one_more_advice_prog@tcp(127.0.0.1:4307)/one_more_advice_prog?collation=utf8mb4_unicode_ci&parseTime=true")
     if err != nil {
         log.Fatal(err)
     }

@@ -81,14 +81,16 @@ func (thread *Thread) Posts() (posts []Post, err error) {
 
 // 新しいスレッドを作成するメソッド
 func (user *User) CreateThread(topic string) (conv Thread, err error) {
-    statement := "insert into threads (uuid, topic, user_id, created_at) values ($1, $2, $3, $4) returning id, uuid, topic, user_id, created_at"
+    // statement := "insert into threads (uuid, topic, user_id, created_at) values ($1, $2, $3, $4) returning id, uuid, topic, user_id, created_at"
+    statement := "insert into threads (uuid, topic, user_id, created_at) values (?, ?, ?, ?)"
     stmt, err := Db.Prepare(statement)
     if err != nil {
         return
     }
     defer stmt.Close()
     // use QueryRow to return a row and scan the returned id into the Session struct
-    err = stmt.QueryRow(createUUID(), topic, user.Id, time.Now()).Scan(&conv.Id, &conv.Uuid, &conv.Topic, &conv.UserId, &conv.CreatedAt)
+    // err = stmt.QueryRow(createUUID(), topic, user.Id, time.Now()).Scan(&conv.Id, &conv.Uuid, &conv.Topic, &conv.UserId, &conv.CreatedAt)
+    _, err = stmt.Exec(createUUID(), topic, user.Id, time.Now())
     return
 }
 
@@ -146,7 +148,7 @@ func ThreadByUUID(uuid string) (conv Thread, err error) {
             FROM
                 threads
             WHERE
-                uuid = &1`
+                uuid = ?`
     err = Db.QueryRow(queryStr, uuid).Scan(&conv.Id, &conv.Uuid, &conv.Topic, &conv.UserId, &conv.CreatedAt)
     return
 }

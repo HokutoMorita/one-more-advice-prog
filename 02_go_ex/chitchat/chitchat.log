@@ -11,3 +11,5 @@ ERROR 2021/09/18 22:06:02 utils.go:99: Error 1054: Unknown column '$1' in 'where
 ERROR 2021/09/18 22:07:23 utils.go:99: Error 1064: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'returning id, uuid, created_at' at line 1 Cannot create user
 ERROR 2021/09/18 22:07:29 utils.go:99: Error 1054: Unknown column '$1' in 'where clause' Cannot find user
 ERROR 2021/09/18 22:10:13 utils.go:99: Error 1064: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'returning id, uuid, created_at' at line 1 Cannot create user
+ERROR 2021/09/19 09:41:00 utils.go:99: Error 1064: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'returning id, uuid, created_at' at line 1 Cannot create user
+ERROR 2021/09/19 09:43:59 utils.go:99: Error 1064: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'returning id, uuid, created_at' at line 1 Cannot create user

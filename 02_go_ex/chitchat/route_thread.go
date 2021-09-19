@@ -12,6 +12,7 @@ import (
 func newThread(writer http.ResponseWriter, request *http.Request) {
     _, err := session(writer, request)
     if err != nil {
+        danger(err)
         http.Redirect(writer, request, "/login", 302)
     } else {
         generateHTML(writer, nil, "layout", "private.navbar", "new.thread")
@@ -48,12 +49,15 @@ func readThread(writer http.ResponseWriter, request *http.Request) {
     uuid := vals.Get("id")
     thread, err := data.ThreadByUUID(uuid)
     if err != nil {
+        danger(err)
         error_message(writer, request, "Cannot read thread")
     } else {
         _, err := session(writer, request)
         if err != nil {
+            danger(err)
             generateHTML(writer, &thread, "layout", "public.navbar", "public.thread")
         } else {
+            info("プライベート機能付きでスレッドを確認できます")
             generateHTML(writer, &thread, "layout", "private.navbar", "private.thread")
         }
     }

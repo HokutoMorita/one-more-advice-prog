@@ -26,11 +26,13 @@ func signupAccount(writer http.ResponseWriter, request *http.Request) {
     if err != nil {
         danger(err, "Cannot parse form")
     }
+
     user := data.User{
         Name:     request.PostFormValue("name"),
         Email:    request.PostFormValue("email"),
         Password: request.PostFormValue("password"),
     }
+
     if err := user.Create(); err != nil {
         danger(err, "Cannot create user")
     }
@@ -55,6 +57,8 @@ func authenticate(writer http.ResponseWriter, request *http.Request) {
             Value:    session.Uuid,
             HttpOnly: true,
         }
+        // info("SessionのUuID: ", session.Uuid)
+        // info("Cookie情報", cookie)
         http.SetCookie(writer, &cookie)
         http.Redirect(writer, request, "/", 302)
     } else {
@@ -70,7 +74,10 @@ func logout(writer http.ResponseWriter, request *http.Request) {
     if err != http.ErrNoCookie {
         warning(err, "Failed to get cookie")
         session := data.Session{Uuid: cookie.Value}
-        session.DeleteByUUID()
+        err = session.DeleteByUUID()
+        if err != nil {
+            danger(err)
+        }
     }
     http.Redirect(writer, request, "/", 302)
 }

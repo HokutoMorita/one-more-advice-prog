@@ -21,18 +21,18 @@
 </div>
 
 
-  <div class="panel panel-info">
-    <div class="panel-body">
-     <form role="form" action="/thread/post" method="post">
-       <div class="form-group">
-         <textarea class="form-control" name="body" id="body" placeholder="ここに返信を書いてください" rows="3"></textarea>
-         <input type="hidden" name="uuid" value="{{ .Uuid }}">
-         <br/>
-         <button class="btn btn-primary pull-right" type="submit">返信</button>
-       </div>
-     </form>
-     </div>
-  </div>
+<div class="panel panel-info">
+  <div class="panel-body">
+    <form role="form" action="/thread/post" method="post">
+      <div class="form-group">
+        <textarea class="form-control" name="body" id="body" placeholder="ここに返信を書いてください" rows="3"></textarea>
+        <input type="hidden" name="uuid" value="{{ .Uuid }}">
+        <br/>
+        <button class="btn btn-primary pull-right" type="submit">返信</button>
+      </div>
+    </form>
+    </div>
+</div>
 
 
 
