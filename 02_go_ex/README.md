@@ -87,6 +87,12 @@ $ go env
 $ go mod init zoo
 ```
 
+## ローカル用DBの環境構築
+### 1. Docker環境でDBサーバーを稼働させる
+```
+$ docker-compose up one_more_advice_db_prog
+```
+
 ## 参考資料
   - 【Go言語】作成したpackageをimportして使用。「cannot find module for path」エラー時の解決
     - https://qiita.com/namari/items/a037e2167eeec3a20ea7

@@ -50,8 +50,8 @@ func (thread *Thread) NumReplies() (count int) {
 
 // スレッドに投稿した投稿データを取得するメソッド
 func (thread *Thread) Posts() (posts []Post, err error) {
-    rows, err := Db.Query(
-        "SELECT 
+    queryStr := `
+        SELECT 
             id,
             uuid,
             body,
@@ -61,9 +61,8 @@ func (thread *Thread) Posts() (posts []Post, err error) {
         FROM 
             posts
         WHERE 
-            thread_id = $1"
-        , thread.Id
-    )
+            thread_id = $1`
+    rows, err := Db.Query(queryStr, thread.Id)
     if err != nil {
         // 空のリストが返される？？
         return
@@ -108,18 +107,18 @@ func (user *User) CreatePost(conv Thread, body string) (post Post, err error) {
 
 // すべてのスレッドを取得する
 func Threads() (threads []Thread, err error) {
-    rows, err := Db.Query(
-        "SELECT
-            id,
-            uuid,
-            topic,
-            user_id,
-            created_at
-        FROM
-            threads
-        ORDER BY
-            created_at DESC"
-    )
+    queryStr := `
+        SELECT
+                id,
+                uuid,
+                topic,
+                user_id,
+                created_at
+            FROM
+                threads
+            ORDER BY
+                created_at DESC`
+    rows, err := Db.Query(queryStr)
     if err != nil {
         return
     }
@@ -137,27 +136,26 @@ func Threads() (threads []Thread, err error) {
 // UUIDに対応するスレッドを取得する
 func ThreadByUUID(uuid string) (conv Thread, err error) {
     conv = Thread{}
-    err = Db.QueryRow(
-        "SELECT
-            id,
-            uuid,
-            topic,
-            user_id,
-            created_at
-        FROM
-            threads
-        WHERE
-            uuid = &1"
-        , uuid
-    ).Scan(&conv.Id, &conv.Uuid, &conv.Topic, &conv.UserId, &conv.CreatedAt)
+    queryStr := `
+        SELECT
+                id,
+                uuid,
+                topic,
+                user_id,
+                created_at
+            FROM
+                threads
+            WHERE
+                uuid = &1`
+    err = Db.QueryRow(queryStr, uuid).Scan(&conv.Id, &conv.Uuid, &conv.Topic, &conv.UserId, &conv.CreatedAt)
     return
 }
 
 // このスレッドを始めたユーザーを取得する
 func (thread *Thread) User() (user User) {
     user = User{}
-    Db.QueryRow(
-        "SELECT
+    queryStr := `
+    SELECT
             id,
             uuid,
             name,
@@ -166,27 +164,25 @@ func (thread *Thread) User() (user User) {
         FROM
             users
         WHERE
-            id = $1"
-        , thread.UserId
-    ).Scan(&user.Id, &user.Uuid, &user.Name, &user.Email, &user.CreatedAt)
+            id = $1`
+    Db.QueryRow(queryStr, thread.UserId).Scan(&user.Id, &user.Uuid, &user.Name, &user.Email, &user.CreatedAt)
     return
 }
 
 // この投稿を書いたユーザーを取得する
 func (post *Post) User() (user User) {
     user = User{}
-    Db.QueryRow(
-        "SELECT
-            id,
-            uuid,
-            name,
-            email,
-            created_at
-        FROM
-            users
-        WHERE
-            id = $1"
-        , post.UserId
-    ).Scan(&user.Id, &user.Uuid, &user.Name, &user.Email, &user.CreatedAt)
+    queryStr := `
+        SELECT
+                id,
+                uuid,
+                name,
+                email,
+                created_at
+            FROM
+                users
+            WHERE
+                id = $1`
+    Db.QueryRow(queryStr, post.UserId).Scan(&user.Id, &user.Uuid, &user.Name, &user.Email, &user.CreatedAt)
     return
 }

@@ -2,7 +2,8 @@ package main
 
 import (
     "fmt"
-    "github.com/mushahiroyuki/gowebprog/ch02/chitchat/data"
+    // "github.com/mushahiroyuki/gowebprog/ch02/chitchat/data"
+    "chitchat/data"
     "net/http"
 )
 
@@ -18,7 +19,7 @@ func newThread(writer http.ResponseWriter, request *http.Request) {
 }
 
 // POST /signup
-// ユーザーアカウントを作成する
+// Create the user account
 func createThread(writer http.ResponseWriter, request *http.Request) {
     sess, err := session(writer, request)
     if err != nil {
@@ -27,10 +28,6 @@ func createThread(writer http.ResponseWriter, request *http.Request) {
         err = request.ParseForm()
         if err != nil {
             danger(err, "Cannot parse form")
-        }
-        user, err := sess.User()
-        if err != nil {
-            danger(err, "Cannnot parse form")
         }
         user, err := sess.User()
         if err != nil {

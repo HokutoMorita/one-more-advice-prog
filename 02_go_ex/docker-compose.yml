@@ -16,4 +16,11 @@ services:
       - 50501:8080
     volumes:
       - ./go_prog:/go/app # マウントディレクトリ
-    
+  one_more_advice_db_prog:
+        image: mysql:5.7
+        environment:
+            MYSQL_ROOT_PASSWORD: one_more_advice_prog
+            MYSQL_DATABASE: one_more_advice_prog
+        ports:
+            - 4307:3306
+        command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci

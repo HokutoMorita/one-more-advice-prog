@@ -5,7 +5,8 @@ import (
     "crypto/sha1"
     "database/sql"
     "fmt"
-    _ "github.com/lib/pq"
+    // _ "github.com/lib/pq"
+    _ "github.com/go-sql-driver/mysql"
     "log"
 )
 
@@ -13,9 +14,9 @@ var Db *sql.DB
 
 func init() {
     var err error
-    Db, err = sql.Open("postgres", "dbname=chitchat sslmode=disable")
+    Db, err = sql.Open("mysql", "root:one_more_advice_prog@tcp(127.0.0.1:4307)/one_more_advice_prog?collation=utf8mb4_unicode_ci")
     if err != nil {
-        log.Fetal(err)
+        log.Fatal(err)
     }
     return
 }
@@ -25,7 +26,7 @@ func createUUID() (uuid string) {
     u := new([16]byte)
     _, err := rand.Read(u[:])
     if err != nil {
-        log.Fetalln("Cannot generate UUID", err)
+        log.Fatalln("Cannot generate UUID", err)
     }
 
     // 0x40 is reserved variant from RFC 4122
@@ -39,6 +40,6 @@ func createUUID() (uuid string) {
 
 // hash plaintext with SHA-1
 func Encrypt(plaintext string) (cryptext string) {
-    cryptext = fmt.Sprintf("%x", shal1.Sum([]byte(plaintext)))
+    cryptext = fmt.Sprintf("%x", sha1.Sum([]byte(plaintext)))
     return cryptext
 }

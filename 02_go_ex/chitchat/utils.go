@@ -4,7 +4,8 @@ import (
     "encoding/json"
     "errors"
     "fmt"
-    "github.com/mushahiroyuki/gowebprog/ch02/chitchat/data"
+    // "github.com/mushahiroyuki/gowebprog/ch02/chitchat/data"
+    "chitchat/data"
     "html/template"
     "log"
     "net/http"
@@ -50,13 +51,13 @@ func loadConfig() {
 }
 
 // エラーメッセージページにリダイレクトさせる関数
-func error_message(writer, http.ResponseWriter, request *http.Request, msg string) {
+func error_message(writer http.ResponseWriter, request *http.Request, msg string) {
     url := []string{"/err?msg=", msg}
-    http.Redirect(writer, request, strings.Json(url, ""), 302)
+    http.Redirect(writer, request, strings.Join(url, ""), 302)
 }
 
 // ユーザーがログインしてる かつ セッションがあることを判別する関数
-func session(writer, http.ResponseWriter, request *http.Request) (sess data.Session, err error) {
+func session(writer http.ResponseWriter, request *http.Request) (sess data.Session, err error) {
     cookie, err := request.Cookie("_cookie")
     if err == nil {
         sess = data.Session{Uuid: cookie.Value}
@@ -78,7 +79,7 @@ func parseTemplateFiles(filenames ...string) (t *template.Template) {
     return
 }
 
-func generateHTML(writer, http.ResponseWriter, data interface{}, filenames ...string)  {
+func generateHTML(writer http.ResponseWriter, data interface{}, filenames ...string)  {
     var files []string
     for _, file := range filenames {
         files = append(files, fmt.Sprintf("templates/%s.html", file))
