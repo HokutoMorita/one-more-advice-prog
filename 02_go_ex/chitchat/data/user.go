@@ -44,7 +44,7 @@ func (user *User) CreateSession() (session Session, err error) {
 // Get the session for an existing user
 func (user *User) Session() (session Session, err error) {
     session = Session{}
-    err = Db.QueryRow("SELECT id, uuid, email, user_id, created_at FROM sessions WHERE user_id = $1", user.Id).
+    err = Db.QueryRow("SELECT id, uuid, email, user_id, created_at FROM sessions WHERE user_id = ?", user.Id).
         Scan(&session.Id, &session.Uuid, &session.Email, &session.UserId, &session.CreatedAt)
     return
 }
@@ -115,7 +115,7 @@ func (user *User) Create() (err error) {
 
 // Delete user from database
 func (user *User) Delete() (err error) {
-    statement := "delete from users where id = $1"
+    statement := "delete from users where id = ?"
     stmt, err := Db.Prepare(statement)
     if err != nil {
         return
@@ -176,7 +176,7 @@ func UserByEmail(email string) (user User, err error) {
 // Get a single user given the UUID
 func UserByUUID(uuid string) (user User, err error) {
     user = User{}
-    err = Db.QueryRow("SELECT id, uuid, name, email, password, created_at FROM users WHERE uuid = $1", uuid).
+    err = Db.QueryRow("SELECT id, uuid, name, email, password, created_at FROM users WHERE uuid = ?", uuid).
         Scan(&user.Id, &user.Uuid, &user.Name, &user.Email, &user.Password, &user.CreatedAt)
     return
 }

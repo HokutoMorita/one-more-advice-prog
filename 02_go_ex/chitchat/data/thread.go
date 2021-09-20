@@ -2,6 +2,7 @@ package data
 
 import (
     "time"
+    "fmt"
 )
 
 type Thread struct {
@@ -32,14 +33,16 @@ func (post *Post) CreatedAtDate() string {
 
 // スレッド内の投稿番号を取得するメソッド
 func (thread *Thread) NumReplies() (count int) {
-    rows, err := Db.Query("SELECT count(*) FROM posts WHERE thread_id = $1", thread.Id)
+    rows, err := Db.Query("SELECT count(*) FROM posts WHERE thread_id = ?", thread.Id)
     if err != nil {
         // countは0がリターンされる？？
+        fmt.Println(err)
         return
     }
     for rows.Next() {
         if err = rows.Scan(&count); err != nil {
             // countはインクリメントされた値がリターンされる？？
+            fmt.Println(err)
             return
         }
     }
@@ -61,7 +64,7 @@ func (thread *Thread) Posts() (posts []Post, err error) {
         FROM 
             posts
         WHERE 
-            thread_id = $1`
+            thread_id = ?`
     rows, err := Db.Query(queryStr, thread.Id)
     if err != nil {
         // 空のリストが返される？？
@@ -71,6 +74,7 @@ func (thread *Thread) Posts() (posts []Post, err error) {
         post := Post{}
         if err = rows.Scan(&post.Id, &post.Uuid, &post.Body, &post.UserId, &post.ThreadId, &post.CreatedAt); err != nil {
             // この時点で追加されてるpostsを返す
+            fmt.Println(err)
             return
         }
         posts = append(posts, post)
@@ -96,14 +100,16 @@ func (user *User) CreateThread(topic string) (conv Thread, err error) {
 
 // スレッドに新しい投稿を作成するメソッド
 func (user *User) CreatePost(conv Thread, body string) (post Post, err error) {
-    statement := "insert into posts (uuid, body, user_id, thread_id, created_at) values ($1, $2, $3, $4, $5) returning id, uuid, body, user_id, thread_id, created_at"
+    // statement := "insert into posts (uuid, body, user_id, thread_id, created_at) values ($1, $2, $3, $4, $5) returning id, uuid, body, user_id, thread_id, created_at"
+    statement := "insert into posts (uuid, body, user_id, thread_id, created_at) values (?, ?, ?, ?, ?)"
     stmt, err := Db.Prepare(statement)
     if err != nil {
         return
     }
     defer stmt.Close()
     // use QueryRow to return a row and scan the returned id into the Session struct
-    err = stmt.QueryRow(createUUID(), body, user.Id, conv.Id, time.Now()).Scan(&post.Id, &post.Uuid, &post.Body, &post.UserId, &post.ThreadId, &post.CreatedAt)
+    // err = stmt.QueryRow(createUUID(), body, user.Id, conv.Id, time.Now()).Scan(&post.Id, &post.Uuid, &post.Body, &post.UserId, &post.ThreadId, &post.CreatedAt)
+    _, err = stmt.Exec(createUUID(), body, user.Id, conv.Id, time.Now())
     return
 }
 
@@ -166,7 +172,7 @@ func (thread *Thread) User() (user User) {
         FROM
             users
         WHERE
-            id = $1`
+            id = ?`
     Db.QueryRow(queryStr, thread.UserId).Scan(&user.Id, &user.Uuid, &user.Name, &user.Email, &user.CreatedAt)
     return
 }
@@ -184,7 +190,7 @@ func (post *Post) User() (user User) {
             FROM
                 users
             WHERE
-                id = $1`
+                id = ?`
     Db.QueryRow(queryStr, post.UserId).Scan(&user.Id, &user.Uuid, &user.Name, &user.Email, &user.CreatedAt)
     return
 }
