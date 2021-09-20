@@ -41,5 +41,7 @@ $ ./chitchat
 ## 3. ブラウザで確認
   - http://localhost:8080
 
+![スクリーンショット 2021-09-20 10 44 14](https://user-images.githubusercontent.com/38268537/133950429-170c9e7d-8e6c-442d-a622-0ed104123087.png)
+
 
 ![スクリーンショット 2021-09-20 10 34 54](https://user-images.githubusercontent.com/38268537/133950389-936add6c-7de8-45ed-a714-373cd572ba75.png)
