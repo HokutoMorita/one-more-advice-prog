@@ -36,3 +36,26 @@ $ curl -i -X GET http://127.0.0.1:8080/post/1
 ```
 $ curl -i -X DELETE http://127.0.0.1:8080/post/1
 ```
+
+## DBの接続情報
+  - ホスト名
+    - 127.0.0.1
+  - ユーザ名
+    - morita
+  - DB名
+    - one_more_advice_prog
+  - パスワード
+    - %1234567a
+  - ポート
+    - 5432
+
+## pgadmin4のパスワード
+```sh
+# PostgreSQLのユーザー追加
+$ createuser -P morita
+$ ALTER ROLE morita WITH CREATEDB CREATEROLE;
+
+# ユーザーアカウント
+ユーザー名: morita
+PW: %1234567a
+```
