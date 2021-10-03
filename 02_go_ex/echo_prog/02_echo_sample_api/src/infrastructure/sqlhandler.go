@@ -3,7 +3,7 @@ package infrastructure
 import (
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
-	"echo_sample_api/src/interfaces/database"
+	"echo_sample_api/interfaces/database"
 )
 
 type SqlHandler struct {

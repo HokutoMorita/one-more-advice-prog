@@ -1,9 +1,9 @@
 package controllers
 
 import (
-	"echo_sample_api/src/domain"
-	"echo_sample_api/src/interfaces/database"
-	"echo_sample_api/src/usecase"
+	"echo_sample_api/domain"
+	"echo_sample_api/interfaces/database"
+	"echo_sample_api/usecase"
 
 	"github.com/labstack/echo"
 )

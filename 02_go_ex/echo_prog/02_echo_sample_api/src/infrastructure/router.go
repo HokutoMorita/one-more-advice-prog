@@ -1,7 +1,7 @@
 package infrastructure
 
 import (
-	controllers "echo_sample_api/src/interfaces/api"
+	controllers "echo_sample_api/interfaces/api"
 	"net/http"
 	"github.com/labstack/echo"
 )
@@ -29,5 +29,5 @@ func Init() {
 	})
 
 	// Start server
-	e.Logger.Fetal(e.Start(":1323"))
+	e.Logger.Fatal(e.Start(":1323"))
 }
