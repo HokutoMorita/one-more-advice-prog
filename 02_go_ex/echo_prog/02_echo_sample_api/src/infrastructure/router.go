@@ -1,6 +1,7 @@
 package infrastructure
 
 import (
+	"fmt"
 	controllers "echo_sample_api/interfaces/api"
 	"net/http"
 	"github.com/labstack/echo"
@@ -28,9 +29,12 @@ func Init() {
 		return c.String(http.StatusOK, "deleted")
 	})
 
-	e.POST("/user/update", func(c echo.Context) error {
-		// id := c.Param("id")
-		userController.Update(c)
+	e.POST("/user/update/:id", func(c echo.Context) error {
+		// name := c.FormValue("name")
+		fmt.Println("取得したjsonの値")
+		fmt.Println(c)
+		id := c.Param("id")
+		userController.Update(id, c)
 		return c.String(http.StatusOK, "updated")
 	})
 

@@ -18,6 +18,12 @@ func (db *UserRepository) Select() []domain.User {
 	return user
 }
 
+func (db *UserRepository) SelectById(id string) domain.User {
+	user := domain.User{}
+	db.FindById(&user, id)
+	return user
+}
+
 func (db *UserRepository) Delete(id string) {
 	user := []domain.User{}
 	db.DeleteById(&user, id)

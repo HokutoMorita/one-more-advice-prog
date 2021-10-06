@@ -41,10 +41,12 @@ func (controller *UserController) Delete(id string) {
 	controller.Interactor.Delete(id)
 }
 
-func (controller *UserController) Update(c echo.Context) {
-	u := domain.User{}
-	c.Bind(&u)
-	fmt.Println("取得した値")
+func (controller *UserController) Update(id string, c echo.Context) {
+	u := controller.Interactor.GetInfoById(id)
+	fmt.Println("取得した値ユーザーモデル")
 	fmt.Println(u)
+	name := c.FormValue("name")
+	fmt.Println("取得したjsonの値")
+	fmt.Println(name)
 	controller.Interactor.Update(u)
 }
