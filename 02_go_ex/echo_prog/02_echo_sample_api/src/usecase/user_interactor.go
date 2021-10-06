@@ -16,6 +16,14 @@ func (interactor *UserInteractor) GetInfo() []domain.User {
 	return interactor.UserRepository.Select()
 }
 
+func (interactor *UserInteractor) GetInfoById(id string) domain.User {
+	return interactor.UserRepository.SelectById(id)
+}
+
 func (interactor *UserInteractor) Delete(id string) {
 	interactor.UserRepository.Delete(id)
+}
+
+func (interactor *UserInteractor) Update(u domain.User) {
+	interactor.UserRepository.Update(u)
 }

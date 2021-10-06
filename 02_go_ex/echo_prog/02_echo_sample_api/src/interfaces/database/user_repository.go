@@ -22,3 +22,7 @@ func (db *UserRepository) Delete(id string) {
 	user := []domain.User{}
 	db.DeleteById(&user, id)
 }
+
+func (db *UserRepository) Update(u domain.User) {
+	db.UpdateAll(&u)
+}

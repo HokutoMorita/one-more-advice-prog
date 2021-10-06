@@ -28,6 +28,12 @@ func Init() {
 		return c.String(http.StatusOK, "deleted")
 	})
 
+	e.POST("/user/update", func(c echo.Context) error {
+		// id := c.Param("id")
+		userController.Update(c)
+		return c.String(http.StatusOK, "updated")
+	})
+
 	// Start server
 	e.Logger.Fatal(e.Start(":1323"))
 }

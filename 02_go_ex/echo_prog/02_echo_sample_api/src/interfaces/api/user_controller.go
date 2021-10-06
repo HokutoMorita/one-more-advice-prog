@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"echo_sample_api/domain"
 	"echo_sample_api/interfaces/database"
 	"echo_sample_api/usecase"
@@ -38,4 +39,12 @@ func (controller *UserController) GetUser() []domain.User {
 
 func (controller *UserController) Delete(id string) {
 	controller.Interactor.Delete(id)
+}
+
+func (controller *UserController) Update(c echo.Context) {
+	u := domain.User{}
+	c.Bind(&u)
+	fmt.Println("取得した値")
+	fmt.Println(u)
+	controller.Interactor.Update(u)
 }
