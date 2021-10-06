@@ -29,7 +29,7 @@ func (handler *SqlHandler) FindAll(obj interface{}) {
 	handler.db.Find(obj)
 }
 
-func (handler *SqlHandler) FindById(obj interface{}, id string) {
+func (handler *SqlHandler) FindById(obj interface{}, id int) {
 	handler.db.First(obj, id)
 }
 

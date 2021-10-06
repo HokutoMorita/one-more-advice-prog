@@ -16,7 +16,7 @@ func (interactor *UserInteractor) GetInfo() []domain.User {
 	return interactor.UserRepository.Select()
 }
 
-func (interactor *UserInteractor) GetInfoById(id string) domain.User {
+func (interactor *UserInteractor) GetInfoById(id int) domain.User {
 	return interactor.UserRepository.SelectById(id)
 }
 
