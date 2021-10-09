@@ -1,7 +1,7 @@
 package usecase
 
 import (
-	"app/domain"
+	"clean_architecture_user_api/src/app/domain"
 )
 
 type UserInteractor struct {
@@ -9,7 +9,8 @@ type UserInteractor struct {
 }
 
 func (interactor *UserInteractor) Add(u domain.User) (err error) {
-	_, err := interactor.UserRepository.Store(u)
+	_, err = interactor.UserRepository.Store(u)
+	return
 }
 
 func (interactor *UserInteractor) Users() (user domain.Users, err error) {
@@ -17,7 +18,7 @@ func (interactor *UserInteractor) Users() (user domain.Users, err error) {
 	return
 }
 
-func (interactor *UserInteractor) UserById(identifier int) (user domain.Users, err error) {
+func (interactor *UserInteractor) UserById(identifier int) (user domain.User, err error) {
 	user, err = interactor.UserRepository.FindById(identifier)
 	return
 }

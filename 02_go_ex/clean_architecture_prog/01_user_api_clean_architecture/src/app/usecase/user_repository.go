@@ -1,7 +1,7 @@
 package usecase
 
 import (
-	"app/domain"
+	"clean_architecture_user_api/src/app/domain"
 )
 
 type UserRepository interface {
